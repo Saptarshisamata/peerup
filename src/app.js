@@ -7,6 +7,8 @@ const InitiateDB = require('./config/db')
 const errorHandler = require('./utils/errorhandler')
 const publicRoutes = require('./routes/route')
 
+const PORT = 8001
+
 app.use(express.json())
 app.use(cors())
 
@@ -15,7 +17,7 @@ app.use('/',publicRoutes)
 app.use(errorHandler)
 
 InitiateDB().then(()=>{
-	app.listen(8001,(req,res)=>{
-		console.log(`server started at port 8001`)
+	app.listen(PORT,(req,res)=>{
+		console.log(`server started at port ${PORT}`)
 	})
 })
