@@ -38,7 +38,9 @@ const validate = async (req, res, next) => {
 		}
 		console.log(errors)
 		// errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }))
-		return res.status(422).json()
+		errors.status = 422
+		errors.message = "Invalid Parameter"
+		throw errors
 	} catch (error) {
 		next(error)
 	}

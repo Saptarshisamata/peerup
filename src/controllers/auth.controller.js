@@ -23,6 +23,7 @@ const login = async (req, res, next) => {
 				return res.status(200).json({
 					"status": 200,
 					"token": token,
+					"connection" : student.connection,
 					"message": "success"
 				})
 			} else {
@@ -53,6 +54,8 @@ const signup = async (req, res, next) => {
 				email: req.body.email,
 				username: req.body.username,
 				password: hashed_password,
+				goal : req.body.goal,
+				exp : req.body.exp
 			})
 			await new_student.save()
 			return res.status(201).json({

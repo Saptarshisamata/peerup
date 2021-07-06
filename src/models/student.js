@@ -1,42 +1,54 @@
 const mongoose = require('mongoose')
 
 const studentSchema = new mongoose.Schema({
-	email:{
-        type:String,
-        require:true
+    email: {
+        type: String,
+        require: true
     },
     username: {
-        type:String,
-        require:true,
+        type: String,
+        require: true,
     },
-    password:{
-        type:String,
-        require:true
+    password: {
+        type: String,
+        require: true
     },
-    goal :{
-        type:Number,
-        require:true
+    goal: {
+        type: Number,
+        require: true
     },
-    connection:{
+    topics:{
+        type:[String]
+    },
+    exp:{
+        type: Number,
+        require :true
+    },
+    connection: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "studentSchema"
+        ref: "studentSchema",
+        default: null
     },
-    created_at:{
-        type:Date,
-        require:true,
-        default:Date.now()
+    profile_picture: {
+        type: String,
+        default: ""
     },
-    active:{
-        type:Boolean,
-        require:true,
-        default:true
-        
+    created_at: {
+        type: Date,
+        require: true,
+        default: Date.now()
     },
-    verified:{
-        type:Boolean,
-        require:true,
-        default:false
+    active: {
+        type: Boolean,
+        require: true,
+        default: true
+
+    },
+    verified: {
+        type: Boolean,
+        require: true,
+        default: false
     }
 })
 
-module.exports = mongoose.model("students",studentSchema)
+module.exports = mongoose.model("students", studentSchema)
