@@ -7,25 +7,32 @@ const studentTable = require('../models/student')
 const login = async (req, res, next) => {
 	try {
 		const email = req.body.email
-		const password = req.body.password
 		const student = await studentTable.findOne({
 			email: email
 		})
 		if (student) {
+			const password = req.body.password
 			if (await bcrypt.compare(password, student.password)) {
 				const payload = {
 					_id: student._id,
 					email: email
 				}
-				const token = await jwt.sign(payload, "private-key",{
+				jwt.sign(payload, "private-key", {
 					expiresIn: '24h'
+				}, (err, token) => {
+					if (err) {
+						throw err
+					} else {
+						return res.status(200).json({
+							"status": 200,
+							"username":student.username,
+							"token": token,
+							"connection": student.connection,
+							"message": "success"
+						})
+					}
 				})
-				return res.status(200).json({
-					"status": 200,
-					"token": token,
-					"connection" : student.connection,
-					"message": "success"
-				})
+
 			} else {
 				const err = new Error("invalid password")
 				err.status = 401
@@ -54,18 +61,18 @@ const signup = async (req, res, next) => {
 				email: req.body.email,
 				username: req.body.username,
 				password: hashed_password,
-				goal : req.body.goal,
-				exp : req.body.exp
+				goal: req.body.goal,
+				exp: req.body.exp
 			})
 			await new_student.save()
 			return res.status(201).json({
-				status : 201,
-				message : "success"
+				status: 201,
+				message: "success"
 			})
 		} else {
 			return res.status(400).json({
 				status: 400,
-				message : "user_already_exist"
+				message: "user_already_exist"
 			})
 		}
 	} catch (error) {

@@ -13,5 +13,6 @@ module.exports = async () => {
 		console.log('database connected')
 	}catch(e){
 		console.error(e)
+		process.kill(process.pid, 'SIGTERM')
 	}
 }

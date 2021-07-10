@@ -17,12 +17,12 @@ const studentSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    topics:{
-        type:[String]
+    topics: {
+        type: [String]
     },
-    exp:{
+    exp: {
         type: Number,
-        require :true
+        require: true
     },
     connection: {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +31,7 @@ const studentSchema = new mongoose.Schema({
     },
     profile_picture: {
         type: String,
-        default: ""
+        default: null
     },
     created_at: {
         type: Date,

@@ -12,12 +12,20 @@ const PORT = 8001
 app.use(express.json())
 app.use(cors())
 
-app.use('/',publicRoutes)
+app.use('/', publicRoutes)
 
 app.use(errorHandler)
 
 InitiateDB().then(()=>{
-	app.listen(PORT,(req,res)=>{
+	app.listen(PORT, (req, res) => {
 		console.log(`server started at port ${PORT}`)
 	})
 })
+
+// process.on('SIGTERM', () => {
+// 	server.close(() => {
+// 		console.log('Process terminated')
+// 	})
+// })
+
+module.exports = app
