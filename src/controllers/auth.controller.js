@@ -9,6 +9,9 @@ const login = async (req, res, next) => {
 		const email = req.body.email
 		const student = await studentTable.findOne({
 			email: email
+		},{
+			_id :1,
+			password:1
 		})
 		if (student) {
 			const password = req.body.password

@@ -29,6 +29,14 @@ const studentSchema = new mongoose.Schema({
         ref: "studentSchema",
         default: null
     },
+    request_send: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "studentSchema",
+    }],
+    request_receive: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "studentSchema",
+    }],
     profile_picture: {
         type: String,
         default: null

@@ -7,5 +7,5 @@ const router = express.Router()
 
 // use jwt_auth in production 
 router.get('/suggested_people',jwt_auth,connectionController.suggestedPeoples)
-
+router.post('/send_req',jwt_auth,connectionController.sendRequest)
 module.exports = router
