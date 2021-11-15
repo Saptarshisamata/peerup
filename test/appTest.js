@@ -54,7 +54,7 @@ describe("peer-up api testing",()=>{
 			chai.request(app)
 				.post('/auth/login')
 				.send({
-					"email":"wrong@223.com",
+					"email":"wrong@2236.com",
 					"password":"12345678"
 				})
 				.end((err,response) => {
