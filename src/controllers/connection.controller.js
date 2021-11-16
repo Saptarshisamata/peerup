@@ -5,7 +5,7 @@ const suggestedPeoples = async (req, res, next) => {
 	try {
 		const {
 			id,
-		} = req.body
+		} = req
 		const student = await studentTable.findOne({
 			_id: id
 		})
@@ -62,7 +62,7 @@ const sendRequest = async (req, res, next) => {
 			id,
 			req_send_id,
 			email
-		} = req.body
+		} = req
 		// const student = await studentTable.findOne({
 		// 	_id: _id
 		// })
@@ -91,7 +91,7 @@ const connectionRequestReceivedList = async (req, res, next) => {
 	try {
 		const {
 			id
-		} = req.body
+		} = req
 		const list = await studentTable.findOne({_id:id}).populate('request_receive')
 		return res.status(200).json(list.request_receive)
 
@@ -104,7 +104,7 @@ const connectionRequestSendList = async (req, res, next) => {
 	try {
 		const {
 			id
-		} = req.body
+		} = req
 		const list = await studentTable.findOne({_id:id}).populate('request_send')
 		return res.status(200).json(list.request_receive)
 	} catch (error) {

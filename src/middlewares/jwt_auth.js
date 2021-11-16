@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
 							_id,
 							email
 						} = decoded
-						req._id = _id
+						req.id = _id
 						req.email = email
 						next()
 					}
