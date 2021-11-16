@@ -1,0 +1,17 @@
+$and dose not work with _id ,I don't find why ?? if you can find this 
+				$and: [{
+					_id: {
+						$ne: req.body.id
+						
+					}
+				}, {
+					_id: {
+						$nin: student.request_send
+					}
+				}],
+				_id :
+				 {
+					$ne: req.body.id,
+					$nin: student.request_receive,
+
+				},

@@ -26,16 +26,17 @@ const studentSchema = new mongoose.Schema({
     },
     connection: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "studentSchema",
+        ref: "students",
         default: null
     },
     request_send: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "studentSchema",
+        ref: "students",
     }],
     request_receive: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "studentSchema",
+        ref: "students",
+        default: []
     }],
     profile_picture: {
         type: String,
@@ -48,13 +49,11 @@ const studentSchema = new mongoose.Schema({
     },
     active: {
         type: Boolean,
-        require: true,
         default: true
 
     },
     verified: {
         type: Boolean,
-        require: true,
         default: false
     }
 })

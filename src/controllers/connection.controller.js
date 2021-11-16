@@ -1,60 +1,54 @@
-const jwt = require('jsonwebtoken')
-var ObjectID = require('mongodb').ObjectID;
 const studentTable = require('../models/student')
 
 
 const suggestedPeoples = async (req, res, next) => {
 	try {
 		const {
-			_id,
-			email
-		} = req
-		//	const _id = req.body._id // for testing 
+			id,
+		} = req.body
 		const student = await studentTable.findOne({
-			_id: _id
+			_id: id
 		})
-		 const a = student.request_send
-		 //push senders _id to array to filter out the object
-		 a.push(_id)
-		console.log(student.request_send,_id)
-		// console.log(typeof a)
+		var a = (student.request_send).map(elem => elem)
+		//push senders _id to array to filter out the object
+		a.push(id)
+		a.push(...student.request_receive)
+		// console.log(student.request_send)
+		// console.log(a)
+		// console.log(typeof mongoose.Types.ObjectId(id))
 		//use while loop until array is empty
-		//run below func 
-		const suggestedPeoples = await studentTable.find({
-			//$and dose not work with _id ,I don't find why ?? if you can find this 
-			// $and: [{
-			// 	_id: {
-			// 		$ne: _id
-			// 	}
-			// }, {
-			// 	_id: {
-			// 		$nin: student.request_send
-			// 	}
-			// }],
-			// _id: {
-			// 	$ne: _id
-			// },
-			_id: {
-				$nin: a
-			},
-			// topics:{
-			// 	$in:["array"]
-			// },
-			//match should be done with in same type
-			// request_send:{
-			// 	$nin:student.request_send
-			// },
-			goal: student.goal,
-			$and: [{
-				exp: {
-					$gte: student.exp - 5
-				}
-			}, {
-				exp: {
-					$lte: student.exp + 5
-				}
-			}],
-		})
+		//run below func
+		var suggestedPeoples = []
+		var g_exp = student.exp
+		var l_exp = student.exp
+		while (suggestedPeoples.length === 0) {
+			suggestedPeoples = await studentTable.find({
+				_id: {
+					$nin: a
+				},
+				// topics:{
+				// 	$in:["array"]
+				// },
+				//match should be done with in same type
+				// request_send:{
+				// 	$nin:student.request_send
+				// },
+				goal: student.goal,
+				$and: [{
+					exp: {
+						$gte: g_exp
+					}
+				}, {
+					exp: {
+						$lte: l_exp
+					}
+				}],
+			})
+			g_exp = g_exp - 5
+			l_exp = l_exp + 5
+			console.log(suggestedPeoples.length)
+		}
+		
 		return res.status(200).json(suggestedPeoples)
 
 	} catch (error) {
@@ -65,23 +59,54 @@ const suggestedPeoples = async (req, res, next) => {
 const sendRequest = async (req, res, next) => {
 	try {
 		const {
-			_id,
+			id,
+			req_send_id,
 			email
-		} = req
+		} = req.body
 		// const student = await studentTable.findOne({
 		// 	_id: _id
 		// })
-		const id = req.body.id
 		await studentTable.updateOne({
-			_id: _id
+			_id: id
 		}, {
 			$addToSet: {
-				request_send: id
+				request_send: req_send_id
+			}
+		})
+		await studentTable.updateOne({
+			_id: req_send_id
+		},{
+			$addToSet: {
+				request_receive: id
 			}
 		})
 		return res.status(200).json({
-
+			status:"ok"
 		})
+	} catch (error) {
+		next(error)
+	}
+}
+const connectionRequestReceivedList = async (req, res, next) => {
+	try {
+		const {
+			id
+		} = req.body
+		const list = await studentTable.findOne({_id:id}).populate('request_receive')
+		return res.status(200).json(list.request_receive)
+
+	} catch (error) {
+		next(error)
+	}
+}
+
+const connectionRequestSendList = async (req, res, next) => {
+	try {
+		const {
+			id
+		} = req.body
+		const list = await studentTable.findOne({_id:id}).populate('request_send')
+		return res.status(200).json(list.request_receive)
 	} catch (error) {
 		next(error)
 	}
@@ -91,32 +116,25 @@ const acceptRequest = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error)
 	}
 }
 
-const deleteRequest = async (req, res, next) => {
+const rejectRequest = async (req, res, next) => {
 	try {
 
 	} catch (error) {
-
+		next(error)
 	}
 }
 
-const deleteConnection = async (req, res, next) => {
-	try {
-		
-	} catch (error) {
-		
-	}
-}
 
 
 module.exports = {
 	suggestedPeoples,
 	sendRequest,
 	acceptRequest,
-	deleteRequest,
-	deleteConnection
+	rejectRequest,
+	connectionRequestReceivedList,
+	connectionRequestSendList
 }
-
