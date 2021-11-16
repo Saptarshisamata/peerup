@@ -11,8 +11,11 @@ const login = async (req, res, next) => {
 			email: email
 		},{
 			_id :1,
-			password:1
+			password:1,
+			username: 1,
+			connection: 1
 		})
+		//console.log(student)
 		if (student) {
 			const password = req.body.password
 			if (await bcrypt.compare(password, student.password)) {
