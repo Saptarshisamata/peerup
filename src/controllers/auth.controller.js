@@ -24,7 +24,7 @@ const login = async (req, res, next) => {
 					email: email
 				}
 				jwt.sign(payload, "private-key", {
-					expiresIn: '24h'
+					expiresIn: '24d'
 				}, (err, token) => {
 					if (err) {
 						throw err
@@ -105,5 +105,6 @@ const logout = async (req, res, next) => {
 module.exports = {
 	login,
 	signup,
-	loggedIn
+	loggedIn,
+	logout
 }

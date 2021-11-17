@@ -22,10 +22,5 @@ InitiateDB().then(()=>{
 	})
 })
 
-// process.on('SIGTERM', () => {
-// 	server.close(() => {
-// 		console.log('Process terminated')
-// 	})
-// })
 
 module.exports = app

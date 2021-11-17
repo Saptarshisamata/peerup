@@ -32,6 +32,7 @@ const studentSchema = new mongoose.Schema({
     request_send: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "students",
+        default: []
     }],
     request_receive: [{
         type: mongoose.Schema.Types.ObjectId,
