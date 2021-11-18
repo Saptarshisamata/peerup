@@ -48,7 +48,7 @@ const suggestedPeoples = async (req, res, next) => {
 			l_exp = l_exp + 5
 			console.log(suggestedPeoples.length)
 		}
-		
+
 		return res.status(200).json(suggestedPeoples)
 
 	} catch (error) {
@@ -60,7 +60,6 @@ const sendRequest = async (req, res, next) => {
 	try {
 		const {
 			id,
-			req_send_id,
 			email
 		} = req
 		// const student = await studentTable.findOne({
@@ -70,18 +69,18 @@ const sendRequest = async (req, res, next) => {
 			_id: id
 		}, {
 			$addToSet: {
-				request_send: req_send_id
+				request_send: req.body.req_send_id
 			}
 		})
 		await studentTable.updateOne({
-			_id: req_send_id
-		},{
+			_id: req.body.req_send_id
+		}, {
 			$addToSet: {
 				request_receive: id
 			}
 		})
 		return res.status(200).json({
-			status:"ok"
+			status: "ok"
 		})
 	} catch (error) {
 		next(error)
@@ -92,7 +91,9 @@ const connectionRequestReceivedList = async (req, res, next) => {
 		const {
 			id
 		} = req
-		const list = await studentTable.findOne({_id:id}).populate('request_receive')
+		const list = await studentTable.findOne({
+			_id: id
+		}).populate('request_receive')
 		return res.status(200).json(list.request_receive)
 
 	} catch (error) {
@@ -105,8 +106,10 @@ const connectionRequestSendList = async (req, res, next) => {
 		const {
 			id
 		} = req
-		const list = await studentTable.findOne({_id:id}).populate('request_send')
-		return res.status(200).json(list.request_receive)
+		const list = await studentTable.findOne({
+			_id: id
+		}).populate('request_send')
+		return res.status(200).json(list.request_send)
 	} catch (error) {
 		next(error)
 	}
@@ -114,7 +117,14 @@ const connectionRequestSendList = async (req, res, next) => {
 
 const acceptRequest = async (req, res, next) => {
 	try {
-
+		const {
+			id
+		} = req
+		await studentTable.updateOne({
+			_id:id
+		},{
+			connections: req.body.accept_id
+		})
 	} catch (error) {
 		next(error)
 	}
